@@ -7,9 +7,9 @@
 并在 projects/_index.md 追加一行索引。
 
 用法:
-  python scripts/new_subproject.py --name data-prep
+  python scripts/new_subproject.py --name ag-analysis
   python scripts/new_subproject.py --name knowledge-graph --with-task --type stage
-  python scripts/new_subproject.py --name modeling --root /path/to/big/root --dry-run
+  python scripts/new_subproject.py --name intronic --root /path/to/big/root --dry-run
 
 stdout: {"status":"ok","root":...,"project":...,"created":[...],"dry_run":bool}
 """
@@ -18,6 +18,7 @@ import os
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True  # keep the (synced) skill dir free of __pycache__
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import common as C  # noqa: E402
 

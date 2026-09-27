@@ -29,6 +29,7 @@ import shutil
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True  # keep the (synced) skill dir free of __pycache__
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import common as C  # noqa: E402
 

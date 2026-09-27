@@ -23,7 +23,7 @@
 
 ## 说明
 
-- 新建子项目：`python <skill>/scripts/new_subproject.py --name <项目名>`
-- 结构自检：`python <skill>/scripts/audit_project.py`
-- 看操作日志：`python <skill>/scripts/journal.py --tail 20`
+- 新建子项目：`python <skills>/project-organization/scripts/new_subproject.py --name <项目名>`
+- 结构自检：`python <skills>/project-organization/scripts/audit_project.py`
+- 看操作日志：`python <skills>/project-organization/scripts/journal.py --tail 20`
 - "删除"文件一律先移入 `.trash/`，不得直接硬删。

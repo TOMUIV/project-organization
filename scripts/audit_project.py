@@ -17,6 +17,7 @@ import os
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True  # keep the (synced) skill dir free of __pycache__
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import common as C  # noqa: E402
 
@@ -42,6 +43,20 @@ def audit(root):
         add("low", "missing_index", root / C.ARCHIVE_DIR / "README.md", "归档缺索引 README.md")
     if (root / C.TRASH_DIR).is_dir() and not (root / C.TRASH_DIR / "README.md").is_file():
         add("low", "missing_readme", root / C.TRASH_DIR / "README.md", ".trash 缺说明 README.md")
+
+    # 缓冲区（人类 ⇄ AI 交换区）
+    bdir = root / C.BUFFER_DIR
+    if bdir.is_dir():
+        for sub in (C.BUFFER_INBOX, C.BUFFER_OUTBOX):
+            if not (bdir / sub).is_dir():
+                add("low", "missing_dir", bdir / sub, "缓冲区缺 %s/（跑 buffer.py init）" % sub)
+        inbox = bdir / C.BUFFER_INBOX
+        if inbox.is_dir():
+            pending = [c for c in sorted(inbox.iterdir()) if not c.name.startswith(".")]
+            if pending:
+                add("low", "buffer_pending", inbox,
+                    "缓冲区 buffer/inbox 有 %d 个待处理项（说“读取 buffer”让 AI 归位）"
+                    % len(pending))
 
     # 顶层散落物
     if root.is_dir():
