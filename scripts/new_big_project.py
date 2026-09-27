@@ -7,7 +7,7 @@
 与顶层 README、各索引，并写下 .bigproject.json 标记。
 
 用法:
-  python scripts/new_big_project.py --name "ALS Program" --kind thu
+  python scripts/new_big_project.py --name "my-research" --kind thu
   python scripts/new_big_project.py --name myproj --root /some/base
   python scripts/new_big_project.py --name myproj --path /exact/big/root --dry-run
 

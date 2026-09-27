@@ -9,7 +9,7 @@ description: >
   触发词：组织项目、项目结构、大项目、项目管理、目录整理、项目化、分层结构、新建项目、归档项目、
   读取 buffer、处理 buffer、缓冲区、把文件丢进 buffer、buffer 归位。
   Use ONLY for long-lived / multi-phase projects；一次性临时任务走 `temp-workspace`，不要用本 skill。
-version: 2.1.0
+version: 2.1.1
 ---
 
 # Project Organization — 大项目组织方法论
@@ -59,7 +59,7 @@ version: 2.1.0
 | opencode 临时小项目 | `$OPENCODE_SCRATCH_DIR/` | `scratch` |
 | 其它（用户已有目录等） | 显式 `--root` / `--path` | `custom` |
 
-> 例：`--kind thu --name "ALS Program"` → `$OPENCODE_THU_DIR/ALS-Program/`。
+> 例：`--kind thu --name "my-research"` → `$OPENCODE_THU_DIR/ALS-Program/`。
 > **不写死盘符**：脚本读环境变量，三端（Windows/Linux/macOS）通用。
 
 ---
@@ -91,7 +91,7 @@ version: 2.1.0
 ```
 
 **关键点**
-- 子项目名用英文短横线（`ag-analysis`、`literature-download`），阶段用 `--type stage` 或子文件夹区分。
+- 子项目名用英文短横线（`data-analysis`、`literature-review`），阶段用 `--type stage` 或子文件夹区分。
 - 子项目根目录**只有 README.md**，其余内容进子目录。
 - 任务表/任务书归入所属项目的 `task/`，**不留在根目录**。
 - 顶层只允许 `README.md` / `AGENTS.md` / `MEMORY.md` / `.bigproject.json` 与上述目录（含 `buffer/`），其余一律视为散落物（`audit_project.py` 会报）。
@@ -150,15 +150,15 @@ version: 2.1.0
 $PO = "$env:USERPROFILE\.config\opencode\skills\project-organization\scripts"
 
 # 1) 建大项目根（按类别自动落到对应环境变量根下）
-python "$PO\new_big_project.py" --name "ALS Program" --kind thu
+python "$PO\new_big_project.py" --name "my-research" --kind thu
 
 # 2) 进大项目后建子项目（自动向上查找 .bigproject.json 定位根）
-python "$PO\new_subproject.py" --name ag-analysis --description "AG 结果分析"
+python "$PO\new_subproject.py" --name analysis --description "结果分析"
 
 # 2.5) 缓冲区：用户把文件丢进 buffer/inbox/ 后，AI 读 buffer 并归位
 python "$PO\buffer.py" init --root .                 # 建缓冲区（幂等；new_big_project 已自带）
 python "$PO\buffer.py" list                          # 列 inbox/outbox → 出归属方案 → 用户确认
-python "$PO\buffer.py" take --item 数据.csv --subproject ag-analysis --subdir data --apply
+python "$PO\buffer.py" take --item 数据.csv --subproject analysis --subdir data --apply
 python "$PO\buffer.py" deliver --file output/报告.pdf --apply   # AI 把产物放进 outbox
 
 # 3) 结构自检
@@ -246,7 +246,7 @@ python "$PO\journal.py" --tail 20
 | `--force` | 目录已存在且非空时复用 | 否 |
 | `--dry-run` | 只预演，不落盘 | 否 |
 
-示例：`python scripts/new_big_project.py --name "ALS Program" --kind thu`
+示例：`python scripts/new_big_project.py --name "my-research" --kind thu`
 输出：`{"status":"ok","root":...,"marker":...,"created":[...]}`
 
 ### `scripts/new_subproject.py`
@@ -260,7 +260,7 @@ python "$PO\journal.py" --tail 20
 | `--description` | 项目目的（写入 README 与索引） | 否 |
 | `--force` / `--dry-run` | 复用已存在目录 / 只预演 | 否 |
 
-示例：`python scripts/new_subproject.py --name ag-analysis --description "AG 结果分析"`
+示例：`python scripts/new_subproject.py --name analysis --description "结果分析"`
 输出：`{"status":"ok","root":...,"project":...,"created":[...]}`
 
 ### `scripts/buffer.py`
@@ -278,7 +278,7 @@ python "$PO\journal.py" --tail 20
 覆盖同名旧物**不硬删**：大项目根进 `.trash/`，否则进 `buffer/.replaced/`。
 日志：大项目根写标准 journal；否则写 `buffer/_buffer_log.jsonl`。
 
-示例：`python scripts/buffer.py take --item 数据.csv --subproject ag-analysis --subdir data --apply`
+示例：`python scripts/buffer.py take --item 数据.csv --subproject analysis --subdir data --apply`
 输出：`{"status":"ok","dry_run":false,"dest":...,"moves":[{"from":...,"to":...,"overwrote":false}]}`
 
 ### `scripts/trash.py`
@@ -329,22 +329,21 @@ python "$PO\journal.py" --tail 20
 
 ---
 
-## 十二、真实案例（ALS 项目，2026-09-02）
+## 十二、真实案例（匿名）
 
-大项目根从散落状态归整为：
+一个大项目根从散落状态归整为：
 
 ```
 projects/
-├── carbon/           # Carbon 致病性打分
-├── ag-analysis/      # AG 结果分析
-├── intronic/         # Intronic 5 模态分析
-├── literature-download/  # 文献下载（task/ 放任务表 csv）
-├── knowledge-graph/  # 知识图谱（workplan/ 放任务书）
-├── podmon/           # 集群 AI 审计 Agent
-└── gnomad/           # gnomAD 注释验证
+├── data-analysis/     # 主题 A 结果分析（task/ 放任务表 csv）
+├── structure-review/  # 主题 B 结构复核
+├── cohort-a/          # 批次 A 的整理
+├── literature-review/ # 文献下载与归档
+├── knowledge-base/    # 知识库（workplan/ 放任务书）
+└── ops-monitor/       # 运维/审计 Agent
 shared/
-├── pipeline/  cluster/  meetings/  references/  models/  knowledge/
+├── references/  models/  config/  templates/  pipeline/
 ```
 
-每个项目一个 README；集群同步项目化（根目录散落文件归入 `literature-download/`）；
+每个项目一个 README；外部同步项目化（根目录散落文件归入 `literature-review/`）；
 归整过程中废弃的旧目录一律经 `.trash/` 暂存，未硬删。

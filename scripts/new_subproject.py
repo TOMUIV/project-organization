@@ -7,9 +7,9 @@
 并在 projects/_index.md 追加一行索引。
 
 用法:
-  python scripts/new_subproject.py --name ag-analysis
-  python scripts/new_subproject.py --name knowledge-graph --with-task --type stage
-  python scripts/new_subproject.py --name intronic --root /path/to/big/root --dry-run
+  python scripts/new_subproject.py --name analysis
+  python scripts/new_subproject.py --name data-pipeline --with-task --type stage
+  python scripts/new_subproject.py --name my-project --root /path/to/big/root --dry-run
 
 stdout: {"status":"ok","root":...,"project":...,"created":[...],"dry_run":bool}
 """

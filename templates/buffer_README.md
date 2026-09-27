@@ -32,6 +32,6 @@ buffer/
 $PO = "$env:USERPROFILE\.config\opencode\skills\project-organization\scripts"
 python "$PO\buffer.py" init   --root .                 # 建缓冲区（幂等）
 python "$PO\buffer.py" list   --root .                 # 列 inbox/outbox
-python "$PO\buffer.py" take   --item 某文件 --subproject ag-analysis --subdir data --apply
+python "$PO\buffer.py" take   --item 某文件 --subproject analysis --subdir data --apply
 python "$PO\buffer.py" deliver --file 报告.pdf                      # AI 把产物放进 outbox
 ```
